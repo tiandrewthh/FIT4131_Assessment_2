@@ -13,16 +13,18 @@ public class Menu {
                  |_|   \\___|_| |_|\\__, |\\__,_|_|_| |_| |_|  |_|\\__,_|_| |_|\\__\\___|_|  \s
                                    __/ |                                               \s
                                   |___/                                                \s
-                """
-        );
+                """);
+    }
+    public String getGameModeSelectionMenu() {
+        return ("1. Arcade Mode" + "\n" +
+                "2. Story Mode");
     }
 
 //    public String getPlayMenu() {
 //        String playMenu =
 //        return playMenu;
 //    }
-//
-//    public String getGameModeSelectionMenu
+
 //
 //    public String getStoryModeMenu() {
 //        String StoryModeMenu = "";
