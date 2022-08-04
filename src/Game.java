@@ -65,6 +65,29 @@ public class Game {
         startGame();
     }
 
+    public void promptGameMode() {
+        Input input = new Input();
+        Validation validation = new Validation();
+        boolean isValid = false;
+        System.out.println(getMenu().getStartMenu());
+        System.out.println(getMenu().getGameModeSelectionMenu());
+        do {
+            try {
+                int usrSelection = input.acceptIntegerInput("Please enter 1 or 2 to select a game mode");
+                if (usrSelection == 1 || usrSelection == 2) {
+                    switch (usrSelection) {
+                        case 1 -> this.mode = ARCADE;
+                        case 2 -> this.mode = STORY;
+                    }
+                    isValid = true;
+                }
+            }
+            catch (Exception e) {
+                System.out.println("Selection is not a number");
+            }
+        } while (!isValid);
+    }
+
     public void promptHunterName() {
         Input input = new Input();
         Validation validation = new Validation();
@@ -82,7 +105,6 @@ public class Game {
 
         for (String lineContent : fileContents) {
             String[] lineValues = lineContent.split(",");
-            System.out.println(lineContent);
             String weaponName = lineValues[0];
             int weaponDmg = Integer.parseInt(lineValues[1]);
             String weaponStrong = lineValues[2];
@@ -125,7 +147,7 @@ public class Game {
     public static void startGame() {
         Game newGame = new Game();
         newGame.readFile(WEAPONS_TEXTFILE);
-        System.out.println(newGame.getMenu().getStartMenu());
+        newGame.promptGameMode();
         newGame.promptHunterName();
     }
 }
