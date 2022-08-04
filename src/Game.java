@@ -14,6 +14,8 @@ public class Game {
         hunter = new Hunter();
         menu = new Menu();
         turns = 0;
+        turnLimit = 0;
+        targetFishBal = 0;
         dailyFish = 0;
     }
 
@@ -31,11 +33,6 @@ public class Game {
                 '}';
     }
 
-    public void inputHunterName(String name) {
-        Input input = new Input();
-        String hunterName = input.acceptStringInput("");
-        getHunter().setName(name);
-    }
     public Hunter getHunter() {
         return hunter;
     }
@@ -68,9 +65,19 @@ public class Game {
         startGame();
     }
 
+    public void promptHunterName() {
+        Input input = new Input();
+        Validation validation = new Validation();
+        String hunterName;
+        do {
+            hunterName = input.acceptStringInput("Please enter a name between 3 and 12 characters:");
+        } while (!validation.lengthWithinRange(hunterName, 3, 12));
+        getHunter().setName(hunterName);
+    }
+
     public void readFile(String fileName) {
         FileIO fileIO = new FileIO(fileName);
-        String[] fileContents = fileIO.readFile().split(System.lineSeparator());
+        String[] fileContents = fileIO.readFile().split("\n");
         int counter = 0;
 
         for (String lineContent : fileContents) {
@@ -119,5 +126,6 @@ public class Game {
         Game newGame = new Game();
         newGame.readFile(WEAPONS_TEXTFILE);
         System.out.println(newGame.getMenu().getStartMenu());
+        newGame.promptHunterName();
     }
 }

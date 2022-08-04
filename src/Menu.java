@@ -13,7 +13,7 @@ public class Menu {
                  |_|   \\___|_| |_|\\__, |\\__,_|_|_| |_| |_|  |_|\\__,_|_| |_|\\__\\___|_|  \s
                                    __/ |                                               \s
                                   |___/                                                \s
-                Please enter a name between 3 and 12 characters:"""
+                """
         );
     }
 
