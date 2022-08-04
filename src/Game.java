@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Game {
     private Hunter hunter;
     private String mode;
@@ -15,7 +13,8 @@ public class Game {
         mode = ARCADE;
         hunter = new Hunter();
         menu = new Menu();
-
+        turns = 0;
+        dailyFish = 0;
     }
 
     public Game(String mode, Hunter hunter) {
@@ -76,6 +75,7 @@ public class Game {
 
         for (String lineContent : fileContents) {
             String[] lineValues = lineContent.split(",");
+            System.out.println(lineContent);
             String weaponName = lineValues[0];
             int weaponDmg = Integer.parseInt(lineValues[1]);
             String weaponStrong = lineValues[2];
@@ -118,5 +118,6 @@ public class Game {
     public static void startGame() {
         Game newGame = new Game();
         newGame.readFile(WEAPONS_TEXTFILE);
+        System.out.println(newGame.getMenu().getStartMenu());
     }
 }
