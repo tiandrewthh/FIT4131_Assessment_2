@@ -16,6 +16,9 @@ public class Hunter {
         this.weapons = weapons;
     }
 
+    public void addFish(Fish newFish) {
+        fishes.add(newFish);
+    }
     public void addWeapon(Weapon newWeapon) {
         weapons.add(newWeapon);
     }

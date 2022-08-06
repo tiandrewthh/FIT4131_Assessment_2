@@ -16,14 +16,17 @@ public class Menu {
                 """);
     }
     public String getGameModeSelectionMenu() {
-        return ("1. Arcade Mode" + "\n" +
+        return ("1. Arcade Mode\n" +
                 "2. Story Mode");
     }
 
-//    public String getPlayMenu() {
-//        String playMenu =
-//        return playMenu;
-//    }
+    public String getPlayerMenu() {
+        return ("""
+                1: catch fish
+                2: borrow from loan shark
+                3: Skip"""
+                );
+    }
 
 //
 //    public String getStoryModeMenu() {
