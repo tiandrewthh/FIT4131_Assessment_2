@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 public class Hunter {
     private ArrayList<Fish> fishes;
     private String name;
@@ -49,6 +50,18 @@ public class Hunter {
 
     public Weapon getSpecificWeapon(int index) {
         return weapons.get(index);
+    }
+
+    public void removeFishes(int num) {
+        Iterator<Fish> iterator = getFishes().iterator();
+        int count = 0;
+        while (iterator.hasNext()) {
+            iterator.next();
+            if (count < num) {
+                iterator.remove();
+            }
+            count ++;
+        }
     }
 
     public void setFishes(ArrayList<Fish> fishes) {
