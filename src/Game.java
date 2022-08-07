@@ -10,7 +10,6 @@ public class Game {
     private int dailyFish;
     private int dailyInsurancePremium;
     private int naturalDisasterPenalty;
-
     private int totalFishesOwed;
     final static private String ARCADE = "Arcade";
     final static private String STORY = "Story";
@@ -37,13 +36,38 @@ public class Game {
         this.hunter = hunter;
     }
 
-
-
     public String display() {
         return "Game{" +
                 "mode='" + mode + '\'' +
                 ", hunter=" + hunter +
                 '}';
+    }
+
+    public void borrowFish() {
+        Input input = new Input();
+        boolean isValid = false;
+        if (getHunter().getTotalLoans() <= 100) {
+            while (!isValid) {
+                try {
+                    int loanAmount = input.acceptIntegerInput("Please choose a loan amount between 30 and 100");
+                    if (loanAmount >= 30 && loanAmount <= 100) {
+                        System.out.printf("Borrowed %d fishes at 50 percent interest\n", loanAmount);
+                        getHunter().addSpecificLoan(loanAmount, 1.5, 4);
+                        getHunter().addFishes(loanAmount);
+                        isValid = true;
+                    }
+                    else
+                        System.out.println(ANSI_RED + "Not a valid amount" + ANSI_RESET);
+                }
+                catch (Exception e) {
+                    System.out.println(ANSI_RED + "Please enter a valid number" + ANSI_RESET);
+                }
+            }
+        }
+        else {
+            System.out.println(ANSI_RED + "Loan amount exceeds 100. Cannot borrow anymore");
+        }
+
     }
 
     public void catchFish() {
@@ -142,6 +166,20 @@ public class Game {
         return dailyFish;
     }
 
+    public void getPlayerLoansDisplay() {
+        String[] strLoans = new String[getHunter().getLoanSize()];
+        int index = 0;
+        for (Loan loan : getHunter().getLoans()) {
+            strLoans[index] = loan.display();
+            index++;
+        }
+        System.out.println(getMenu().getPlayerLoans(strLoans));
+    }
+
+    public void getPlayerMenuStats(int turns, int fishes, int fishesToFamily, int insurance, int totalFishesOwed) {
+        System.out.println(getMenu().getPlayerMenuStats(turns, fishes, fishesToFamily, insurance, totalFishesOwed));
+    }
+
     public int getPlayerSelection(int min, int max, String menuPrompt) {
         Input input = new Input();
         boolean isValid = false;
@@ -215,6 +253,23 @@ public class Game {
         System.out.println("Fishes deducted: " + ANSI_RED + "-" + num + ANSI_RESET);
     }
 
+    public void handleLoans() {
+        if (getHunter().getLoanSize() > 0) {
+            for (Loan loan : getHunter().getLoans()) {
+                if (loan.getLoanDueTurn() == 0) {
+                    setTotalFishesOwed(getTotalFishesOwed() + loan.getLoanPayable());
+                    System.out.println("Loan payable added to total fishes owed: " + ANSI_RED + loan.getLoanPayable() + ANSI_RESET);
+                    getHunter().removeLoan(loan);
+                    // Escape loop if number of loans is less than or equal to 0
+                    if (getHunter().getLoanSize() <= 0)
+                        return;
+                }
+                else {
+                    loan.decrementLoanTurn();
+                }
+            }
+        }
+    }
     public void setGameMode(int selection) {
         switch (selection) {
             case 1:
@@ -240,13 +295,6 @@ public class Game {
 
     public void setMode(String mode) {
         this.mode = mode;
-    }
-
-    public void setPlayerSelection(int selection) {
-        switch (selection) {
-            case 1:
-                catchFish();
-        }
     }
 
     public void setNoOfFishes(int num) {
@@ -287,35 +335,50 @@ public class Game {
         this.naturalDisasterPenalty = newNaturalDisasterPenalty;
     }
 
+    public void setPlayerSelection(int selection) {
+        switch (selection) {
+            case 1:
+                catchFish();
+                break;
+            case 2:
+                borrowFish();
+                break;
+            case 3:
+                break;
+        }
+    }
+
     public void setTotalFishesOwed(int totalFishesOwed) {
         this.totalFishesOwed = totalFishesOwed;
     }
 
     public void startArcadeMode() {
-        int totalFishesOwed = 0;
+
         do {
-            setTotalFishesOwed(0);
+            int totalFishesOwed = 0;
+            setTotalFishesOwed(totalFishesOwed);
             setDailyFish(genRandomFishNo(10,20));
             setDailyInsurancePremium(genRandomFishNo(1, 10));
             if (isNaturalDisaster()) {
                 setNaturalDisasterPenalty(genRandomFishNo(50, 100));
-                System.out.printf(ANSI_RED + "Natural disaster has occurred. Lose %d fishes" + ANSI_RESET, getNaturalDisasterPenalty());
+                System.out.printf(ANSI_RED + "Natural disaster has occurred. Lose %d fishes\n" + ANSI_RESET, getNaturalDisasterPenalty());
             }
+
             totalFishesOwed += getDailyFish() + getDailyInsurancePremium() + getNaturalDisasterPenalty();
             setTotalFishesOwed(totalFishesOwed);
-            System.out.println(ANSI_GREEN + "Turn: " + ANSI_RESET + getTurns());
-            System.out.println(ANSI_BLUE + "Fishes: "  + ANSI_RESET + getHunter().getFishesSize());
-            System.out.println(ANSI_BLUE + "Fishes to feed family: " +  ANSI_RESET + getDailyFish());
-            System.out.println(ANSI_BLUE + "Daily insurance premium: "  + ANSI_RESET + getDailyInsurancePremium());
-            System.out.println(ANSI_RED + "Total fishes owed: " + ANSI_RESET + totalFishesOwed);
+            handleLoans();
+            getPlayerMenuStats(getTurns(), getHunter().getFishesSize(), getDailyFish(), getDailyInsurancePremium(), getTotalFishesOwed());
             // prompt player menu
+            // If hunter does have loan, then display loans
+            if (getHunter().getLoanSize() > 0)
+                getPlayerLoansDisplay();
             promptPlayerMenu();
             int playSelection = getPlayerSelection(1,3,"Please make a selection");
             setPlayerSelection(playSelection);
             deductFishes(getTotalFishesOwed());
             incrementTurn();
 
-        } while (getHunter().getFishesSize() > getTotalFishesOwed());
+        } while (getHunter().getFishesSize() > 0);
         System.out.println("Game Over! You ran out of fish!");
     }
 
