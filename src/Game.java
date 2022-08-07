@@ -104,33 +104,11 @@ public class Game {
     }
 
     public void promptGameMode() {
-        Input input = new Input();
-        boolean isValid = false;
         System.out.println(getMenu().getStartMenu());
         System.out.println(getMenu().getGameModeSelectionMenu());
-        do {
-            try {
-                int usrSelection = input.acceptIntegerInput("Please enter 1 or 2 to select a game mode");
-                if (usrSelection == 1 || usrSelection == 2) {
-                    switch (usrSelection) {
-                        case 1:
-                            setMode(ARCADE);
-                            System.out.println(ANSI_GREEN + "Arcade mode selected" + ANSI_RESET);
-                            break;
-                        case 2:
-                            setMode(STORY);
-                            System.out.println(ANSI_GREEN + "Story mode selected" + ANSI_RESET);
-                    }
-                    isValid = true;
-                }
-            }
-            catch (Exception e) {
-                System.out.println(ANSI_RED + "Selection is not a number" + ANSI_RESET);
-            }
-        } while (!isValid);
     }
 
-    public void promptHunterName() {
+    public void getHunterName() {
         Input input = new Input();
         Validation validation = new Validation();
         String hunterName;
@@ -160,6 +138,29 @@ public class Game {
             int weaponMax = Integer.parseInt(lineValues[6]);
             getHunter().addWeapon(new Weapon(weaponCost, weaponDmg, weaponMin, weaponMax, weaponName, weaponStrong, weaponWeak));
         }
+    }
+
+    public void setGameMode(int selection) {
+        Input input = new Input();
+        boolean isValid = false;
+        do {
+            try {
+                switch (selection) {
+                    case 1:
+                        setMode(ARCADE);
+                        System.out.println(ANSI_GREEN + "Arcade mode selected" + ANSI_RESET);
+                        break;
+                    case 2:
+                        setMode(STORY);
+                        System.out.println(ANSI_GREEN + "Story mode selected" + ANSI_RESET);
+                        break;
+                }
+                isValid = true;
+            }
+            catch (Exception e) {
+                System.out.println(ANSI_RED + "Selection is not a number" + ANSI_RESET);
+            }
+        } while (!isValid);
     }
 
     public void setMode(String mode) {
@@ -204,22 +205,41 @@ public class Game {
         this.naturalDisasterPenalty = newNaturalDisasterPenalty;
     }
 
+    public void startArcadeMode() {
+        do {
+            setDailyFish(genDailyFishLimit(10,20));
+            setDailyInsurancePremium(genDailyFishLimit(1, 10));
+            if (isNaturalDisaster()) {
+                setNaturalDisasterPenalty(genDailyFishLimit(50, 100));
+            }
+            // prompt player menu
+            promptPlayerMenu();
+            int playSelection = getPlayerSelection(1,3,"Please make a selection");
+
+        } while (getHunter().getFishesSize() > getDailyFish());
+    }
+
+    public void startStoryMode() {
+
+    }
+
     public static void startGame() {
         Game newGame = new Game();
         newGame.readFile(WEAPONS_TEXTFILE);
         newGame.promptGameMode();
-        newGame.promptHunterName();
+        int gameModeSelection = newGame.getPlayerSelection(1,2,"Please select a game mode");
+        newGame.setGameMode(gameModeSelection);
+        newGame.getHunterName();
         newGame.setNoOfFishes(10);
-        do {
-            newGame.setDailyFish(newGame.genDailyFishLimit(10,20));
-            newGame.setDailyInsurancePremium(newGame.genDailyFishLimit(1, 10));
-            if (newGame.isNaturalDisaster()) {
-                newGame.setNaturalDisasterPenalty(newGame.genDailyFishLimit(50, 100));
-            }
-            // prompt player menu
-            newGame.promptPlayerMenu();
-            int selection = newGame.getPlayerSelection(1,3,"Please make a selection");
+        switch (newGame.getMode()) {
+            case ARCADE:
+                newGame.startArcadeMode();
+                break;
+            case STORY:
+                newGame.startStoryMode();
+                break;
+        }
 
-        } while(newGame.getHunter().getFishesSize() > newGame.getDailyFish());
+
     }
 }
