@@ -75,6 +75,25 @@ public class Game {
         return dailyFish;
     }
 
+    public int getPlayerSelection(int min, int max, String menuPrompt) {
+        Input input = new Input();
+        boolean isValid = false;
+        int choice = 0;
+        while (!isValid) {
+            try {
+                choice = input.acceptIntegerInput(menuPrompt);
+                if (choice >= min && choice <= max)
+                    isValid = true;
+                else
+                    System.out.println(ANSI_RED + "Please enter a valid selection" + ANSI_RESET);
+            }
+            catch (Exception e) {
+                System.out.println(ANSI_RED + "Selection is not a number" + ANSI_RED);
+            }
+        }
+        return choice;
+    }
+
     public boolean isNaturalDisaster() {
         double chanceOfDisaster = Math.random();
         return chanceOfDisaster < 0.01;
@@ -86,7 +105,6 @@ public class Game {
 
     public void promptGameMode() {
         Input input = new Input();
-        Validation validation = new Validation();
         boolean isValid = false;
         System.out.println(getMenu().getStartMenu());
         System.out.println(getMenu().getGameModeSelectionMenu());
@@ -107,7 +125,7 @@ public class Game {
                 }
             }
             catch (Exception e) {
-                System.out.println("Selection is not a number");
+                System.out.println(ANSI_RED + "Selection is not a number" + ANSI_RESET);
             }
         } while (!isValid);
     }
@@ -200,6 +218,7 @@ public class Game {
             }
             // prompt player menu
             newGame.promptPlayerMenu();
+            int selection = newGame.getPlayerSelection(1,3,"Please make a selection");
 
         } while(newGame.getHunter().getFishesSize() > newGame.getDailyFish());
     }
