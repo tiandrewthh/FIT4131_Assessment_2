@@ -28,15 +28,13 @@ public class Weapon {
     }
 
     public String display() {
-        return "Weapon{" +
-                "cost=" + cost +
-                ", damage=" + damage +
-                ", minFish=" + minFish +
-                ", maxFish=" + maxFish +
-                ", name='" + name + '\'' +
-                ", strongAgainst='" + strongAgainst + '\'' +
-                ", weakAgainst='" + weakAgainst + '\'' +
-                '}';
+        return  "Name = '" + name + '\'' +
+                ", Cost = " + cost +
+                ", Damage = " + damage +
+                ", Min = " + minFish +
+                ", Max = " + maxFish +
+                ", Strong Against = '" + strongAgainst + '\'' +
+                ", Weak Against = ' " + weakAgainst + '\'';
     }
 
     public int getCost() {

@@ -1,4 +1,5 @@
 import java.lang.Math;
+import java.util.ArrayList;
 public class Game {
     private Hunter hunter;
     private String mode;
@@ -15,11 +16,12 @@ public class Game {
     final static public String ANSI_RESET = "\u001B[0m";
     final static public String ANSI_GREEN = "\u001B[32m";
     final static public String ANSI_RED = "\u001B[31m";
+    final static public String ANSI_BLUE = "\u001B[34m";
     public Game() {
         mode = ARCADE;
         hunter = new Hunter();
         menu = new Menu();
-        turns = 0;
+        turns = 1;
         turnLimit = 0;
         targetFishBal = 0;
         dailyFish = 0;
@@ -40,12 +42,44 @@ public class Game {
                 '}';
     }
 
-    public int genDailyFishLimit(int min, int max) {
+    public void catchFish() {
+        ArrayList<Weapon> weapons = getHunter().getWeapons();
+        int selection = 1;
+        for (Weapon weapon : weapons) {
+            System.out.println(getMenu().getWeaponMenu(selection, weapon.display()));
+            selection++;
+        }
+
+        int weaponSelection = getPlayerSelection(1, weapons.size(),"Please select a weapon to hunt fish with");
+        Weapon selectedWeapon = weapons.get(weaponSelection - 1);
+        Fish randomFish = new Fish();
+        int caughtFish = genRandomFishNo(selectedWeapon.getMinFish(), selectedWeapon.getMaxFish());
+        if (selectedWeapon.getStrongAgainst().equals(randomFish.getType())) {
+            caughtFish *= 2;
+            System.out.printf(ANSI_GREEN + "DOUBLE FISH CAUGHT! %s is strong against %s\n" + ANSI_RESET, selectedWeapon.getName(), randomFish.getType());
+        }
+        else if (selectedWeapon.getWeakAgainst().equals(randomFish.getType())) {
+            caughtFish /= 2;
+            System.out.printf(ANSI_RED + "HALF FISH CAUGHT! %s is weak1 against %s\n" + ANSI_RESET, selectedWeapon.getName(), randomFish.getType());
+        }
+
+
+        System.out.printf("Hunter %s caught %d %s fishes with %s\n", getHunter().getName(), caughtFish, randomFish.getType(), selectedWeapon.getName());
+        for (int i = 0; i < caughtFish; i++)
+            getHunter().addFish(new Fish(randomFish.getType()));
+
+    }
+
+    public int genRandomFishNo(int min, int max) {
         return (int)(Math.random()*(max-min+1)+min);
     }
 
     public int getDailyInsurancePremium() {
         return this.dailyInsurancePremium;
+    }
+
+    public int getNaturalDisasterPenalty() {
+        return this.naturalDisasterPenalty;
     }
     public Hunter getHunter() {
         return hunter;
@@ -94,6 +128,10 @@ public class Game {
         return choice;
     }
 
+    public void incrementTurn() {
+        this.turns++;
+    }
+
     public boolean isNaturalDisaster() {
         double chanceOfDisaster = Math.random();
         return chanceOfDisaster < 0.01;
@@ -106,16 +144,6 @@ public class Game {
     public void promptGameMode() {
         System.out.println(getMenu().getStartMenu());
         System.out.println(getMenu().getGameModeSelectionMenu());
-    }
-
-    public void getHunterName() {
-        Input input = new Input();
-        Validation validation = new Validation();
-        String hunterName;
-        do {
-            hunterName = input.acceptStringInput("Please enter a name between 3 and 12 characters:");
-        } while (!validation.lengthWithinRange(hunterName, 3, 12));
-        getHunter().setName(hunterName);
     }
 
     public void promptPlayerMenu() {
@@ -141,30 +169,37 @@ public class Game {
     }
 
     public void setGameMode(int selection) {
+        switch (selection) {
+            case 1:
+                setMode(ARCADE);
+                System.out.println(ANSI_GREEN + "Arcade mode selected" + ANSI_RESET);
+                break;
+            case 2:
+                setMode(STORY);
+                System.out.println(ANSI_GREEN + "Story mode selected" + ANSI_RESET);
+                break;
+        }
+    }
+
+    public void setHunterName() {
         Input input = new Input();
-        boolean isValid = false;
+        Validation validation = new Validation();
+        String hunterName;
         do {
-            try {
-                switch (selection) {
-                    case 1:
-                        setMode(ARCADE);
-                        System.out.println(ANSI_GREEN + "Arcade mode selected" + ANSI_RESET);
-                        break;
-                    case 2:
-                        setMode(STORY);
-                        System.out.println(ANSI_GREEN + "Story mode selected" + ANSI_RESET);
-                        break;
-                }
-                isValid = true;
-            }
-            catch (Exception e) {
-                System.out.println(ANSI_RED + "Selection is not a number" + ANSI_RESET);
-            }
-        } while (!isValid);
+            hunterName = input.acceptStringInput("Please enter a name between 3 and 12 characters:");
+        } while (!validation.lengthWithinRange(hunterName, 3, 12));
+        getHunter().setName(hunterName);
     }
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public void setPlayerSelection(int selection) {
+        switch (selection) {
+            case 1:
+                catchFish();
+        }
     }
 
     public void setNoOfFishes(int num) {
@@ -206,15 +241,25 @@ public class Game {
     }
 
     public void startArcadeMode() {
+        int totalFishesOwed = 0;
         do {
-            setDailyFish(genDailyFishLimit(10,20));
-            setDailyInsurancePremium(genDailyFishLimit(1, 10));
+            setDailyFish(genRandomFishNo(10,20));
+            setDailyInsurancePremium(genRandomFishNo(1, 10));
             if (isNaturalDisaster()) {
-                setNaturalDisasterPenalty(genDailyFishLimit(50, 100));
+                setNaturalDisasterPenalty(genRandomFishNo(50, 100));
+                System.out.printf(ANSI_RED + "Natural disaster has occurred. Lose %d fishes" + ANSI_RESET, getNaturalDisasterPenalty());
             }
+            totalFishesOwed += getDailyFish() + getDailyInsurancePremium() + getNaturalDisasterPenalty();
+            System.out.println(ANSI_BLUE + "Turn: " + ANSI_RESET + getTurns());
+            System.out.println(ANSI_BLUE + "Fishes: "  + ANSI_RESET + getHunter().getFishesSize());
+            System.out.println(ANSI_BLUE + "Fishes to feed family: " +  ANSI_RESET + getDailyFish());
+            System.out.println(ANSI_BLUE + "Daily insurance premium: "  + ANSI_RESET + getDailyInsurancePremium());
+            System.out.println(ANSI_RED + "Total fishes owed: " + ANSI_RESET + totalFishesOwed);
             // prompt player menu
             promptPlayerMenu();
             int playSelection = getPlayerSelection(1,3,"Please make a selection");
+            setPlayerSelection(playSelection);
+            incrementTurn();
 
         } while (getHunter().getFishesSize() > getDailyFish());
     }
@@ -229,8 +274,9 @@ public class Game {
         newGame.promptGameMode();
         int gameModeSelection = newGame.getPlayerSelection(1,2,"Please select a game mode");
         newGame.setGameMode(gameModeSelection);
-        newGame.getHunterName();
+        newGame.setHunterName();
         newGame.setNoOfFishes(10);
+
         switch (newGame.getMode()) {
             case ARCADE:
                 newGame.startArcadeMode();
@@ -239,7 +285,5 @@ public class Game {
                 newGame.startStoryMode();
                 break;
         }
-
-
     }
 }

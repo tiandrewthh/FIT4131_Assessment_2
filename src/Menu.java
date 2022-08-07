@@ -16,8 +16,8 @@ public class Menu {
                 """);
     }
     public String getGameModeSelectionMenu() {
-        return ("1. Arcade Mode\n" +
-                "2. Story Mode");
+        return ("1: Arcade Mode\n" +
+                "2: Story Mode");
     }
 
     public String getPlayerMenu() {
@@ -26,6 +26,10 @@ public class Menu {
                 2: borrow from loan shark
                 3: Skip"""
                 );
+    }
+
+    public String getWeaponMenu(int index, String weapon) {
+        return String.format("%d: " + weapon, index);
     }
 
 //
