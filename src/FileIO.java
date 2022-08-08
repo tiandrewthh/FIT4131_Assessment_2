@@ -43,7 +43,7 @@ public class FileIO {
 
     public void writeFile(String input) {
         try {
-            FileWriter writer = new FileWriter(fileName);
+            FileWriter writer = new FileWriter(fileName, true);
             try {
                 String value = input + "\n";
                 writer.append(value);

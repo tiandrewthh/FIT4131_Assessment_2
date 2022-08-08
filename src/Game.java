@@ -47,12 +47,13 @@ public class Game {
         Input input = new Input();
         boolean isValid = false;
         if (getHunter().getTotalLoans() <= 100) {
+            System.out.println(getMenu().getBankMenu());
             while (!isValid) {
                 try {
                     int loanAmount = input.acceptIntegerInput("Please choose a loan amount between 30 and 100");
                     if (loanAmount >= 30 && loanAmount <= 100) {
                         System.out.printf("Borrowed %d fishes at 50 percent interest\n", loanAmount);
-                        getHunter().addSpecificLoan(loanAmount, 1.5, 4);
+                        getHunter().addSpecificLoan(loanAmount, 1.5, 3);
                         getHunter().addFishes(loanAmount);
                         isValid = true;
                     }
@@ -77,9 +78,7 @@ public class Game {
         char huntContinue = 'y';
         while (huntTurns > 0 && huntContinue == 'y') {
             int selection = 1;
-            System.out.println(ANSI_GREEN + "Hunts left: " + ANSI_RESET + huntTurns);
-            System.out.println(ANSI_BLUE + "Fishes: " + ANSI_RESET + getHunter().getFishesSize());
-            System.out.println(ANSI_RED + "Total fishes owed: " + ANSI_RESET + getTotalFishesOwed());
+            System.out.println(getMenu().getHuntMenuStats(huntTurns, getHunter().getFishesSize(), getTotalFishesOwed()));
             for (Weapon weapon : weapons) {
                 System.out.println(getMenu().getWeaponMenu(selection, weapon.display()));
                 selection++;
@@ -133,6 +132,12 @@ public class Game {
 
     public int getDailyInsurancePremium() {
         return this.dailyInsurancePremium;
+    }
+
+    public String getGameResult() {
+        String result = "";
+        result += String.format("Mode: %s, Player name: %s, Days lasted: %d", getMode(), getHunter().getName(), getTurns());
+        return result;
     }
 
     public int getNaturalDisasterPenalty() {
@@ -353,7 +358,6 @@ public class Game {
     }
 
     public void startArcadeMode() {
-
         do {
             int totalFishesOwed = 0;
             setTotalFishesOwed(totalFishesOwed);
@@ -376,13 +380,18 @@ public class Game {
             int playSelection = getPlayerSelection(1,3,"Please make a selection");
             setPlayerSelection(playSelection);
             deductFishes(getTotalFishesOwed());
-            incrementTurn();
-
+            if (getHunter().getFishesSize() > 0)
+                incrementTurn();
         } while (getHunter().getFishesSize() > 0);
+        System.out.println(getMenu().getGameOverMenu());
         System.out.println("Game Over! You ran out of fish!");
     }
 
     public void startStoryMode() {
+
+    }
+
+    public void startTurn() {
 
     }
 
@@ -403,5 +412,16 @@ public class Game {
                 newGame.startStoryMode();
                 break;
         }
+        newGame.writeFile(newGame.getMode());
     }
+
+    public void writeFile(String mode) {
+        FileIO fileIO = new FileIO("score.txt");
+        switch (mode) {
+            case ARCADE:
+                fileIO.writeFile(getGameResult());
+                break;
+        }
+    }
+
 }

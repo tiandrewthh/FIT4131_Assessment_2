@@ -8,7 +8,21 @@ public class Menu {
     public Menu() {
 
     }
+    public String getBankMenu() {
+        return "====================================\n" +
+                "🦈Maruice🦈: Welcome to my bank. How much are you borrowing today?";
+    }
 
+    public String getGameOverMenu() {
+        return ("   _____          __  __ ______    ______      ________ _____  \n" +
+                "  / ____|   /\\   |  \\/  |  ____|  / __ \\ \\    / /  ____|  __ \\ \n" +
+                " | |  __   /  \\  | \\  / | |__    | |  | \\ \\  / /| |__  | |__) |\n" +
+                " | | |_ | / /\\ \\ | |\\/| |  __|   | |  | |\\ \\/ / |  __| |  _  / \n" +
+                " | |__| |/ ____ \\| |  | | |____  | |__| | \\  /  | |____| | \\ \\ \n" +
+                "  \\_____/_/    \\_\\_|  |_|______|  \\____/   \\/   |______|_|  \\_\\\n" +
+                "                                                               \n" +
+                "                                                               ");
+    }
     public String getStartMenu() {
         return ("""
                   _____                       _         _    _             _           \s
@@ -24,6 +38,14 @@ public class Menu {
     public String getGameModeSelectionMenu() {
         return ("1: Arcade Mode\n" +
                 "2: Story Mode");
+    }
+
+    public String getHuntMenuStats(int huntTurns, int fishes, int fishesOwed) {
+        return ("====================================\n" +
+                ANSI_GREEN + "Hunts left: " + ANSI_RESET + huntTurns + "\n" +
+                ANSI_BLUE + "Fishes: " + ANSI_RESET + fishes + "\n" +
+                ANSI_RED + "Total fishes owed: " + ANSI_RESET + fishesOwed + "\n"
+                            );
     }
 
     public String getPlayerMenu() {
