@@ -44,8 +44,7 @@ public class Menu {
         return ("====================================\n" +
                 ANSI_GREEN + "Hunts left: " + ANSI_RESET + huntTurns + "\n" +
                 ANSI_BLUE + "Fishes: " + ANSI_RESET + fishes + "\n" +
-                ANSI_RED + "Total fishes owed: " + ANSI_RESET + fishesOwed + "\n"
-                            );
+                ANSI_RED + "Total fishes owed: " + ANSI_RESET + fishesOwed + "\n");
     }
 
     public String getPlayerMenu() {
@@ -80,9 +79,14 @@ public class Menu {
         return String.format("%d: " + weapon, index);
     }
 
-//
-//    public String getStoryModeMenu() {
-//        String StoryModeMenu = "";
-//        return StoryModeMenu;
-//    }
+    public String getGameWinMenu() {
+        return (" __     __          __          ___       _ \n" +
+                " \\ \\   / /          \\ \\        / (_)     | |\n" +
+                "  \\ \\_/ /__  _   _   \\ \\  /\\  / / _ _ __ | |\n" +
+                "   \\   / _ \\| | | |   \\ \\/  \\/ / | | '_ \\| |\n" +
+                "    | | (_) | |_| |    \\  /\\  /  | | | | |_|\n" +
+                "    |_|\\___/ \\__,_|     \\/  \\/   |_|_| |_(_)\n" +
+                "                                            \n" +
+                "                                            ");
+    }
 }

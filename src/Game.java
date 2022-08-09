@@ -11,6 +11,7 @@ public class Game {
     private int dailyInsurancePremium;
     private int naturalDisasterPenalty;
     private int totalFishesOwed;
+    private boolean isWin;
     final static private String ARCADE = "Arcade";
     final static private String STORY = "Story";
     final static private String WEAPONS_TEXTFILE = "weapons.txt";
@@ -29,6 +30,7 @@ public class Game {
         dailyInsurancePremium = 0;
         naturalDisasterPenalty = 0;
         totalFishesOwed = 0;
+        isWin = false;
     }
 
     public Game(String mode, Hunter hunter) {
@@ -136,7 +138,14 @@ public class Game {
 
     public String getGameResult() {
         String result = "";
-        result += String.format("Mode: %s, Player name: %s, Days lasted: %d", getMode(), getHunter().getName(), getTurns());
+        String gameOutcome = isWin() ? "Win" : "Lose";
+        switch (getMode()) {
+            case ARCADE:
+                result = String.format("Mode: %s, Player name: %s, Days lasted: %d", getMode(), getHunter().getName(), getTurns());
+                break;
+            case STORY:
+                result = String.format("Mode: %s, Player name: %s, Number of turns: %d, Target fish balance: %d, Final fish balance: %2d, Outcome: %s", getMode(), getHunter().getName(), getTurnLimit(), getTargetFishBal(), getHunter().getFishesSize(), gameOutcome);
+        }
         return result;
     }
 
@@ -206,6 +215,10 @@ public class Game {
 
     public int getTotalFishesOwed() {
         return totalFishesOwed;
+    }
+
+    public boolean isWin() {
+        return isWin;
     }
 
     public void incrementTurn() {
@@ -357,7 +370,44 @@ public class Game {
         this.totalFishesOwed = totalFishesOwed;
     }
 
+    public void setWin(boolean win) {
+        isWin = win;
+    }
+
     public void startArcadeMode() {
+        boolean gameEndCondtion = getHunter().getFishesSize() < 0;
+        startTurn(getMode(), gameEndCondtion , 0);
+    }
+
+    public void startStoryMode() {
+        int turnsLimit = 0;
+        int targetFishBalance = 0;
+        Input input = new Input();
+        while (turnsLimit < 5) {
+            try {
+                turnsLimit = input.acceptIntegerInput("Please enter number of turns (5 or more)");
+            }
+            catch (Exception e) {
+                System.out.println("Please enter a valid number");
+            }
+        }
+        while (targetFishBalance < 25) {
+            try {
+                targetFishBalance = input.acceptIntegerInput("Please enter target fish balance (25 or more)");
+            }
+            catch (Exception e) {
+                System.out.println("Please enter a valid number");
+            }
+        }
+        setTurnLimit(turnsLimit);
+        setTargetFishBal(targetFishBalance);
+        boolean gameEndCondition = getTurns() > getTurnLimit();
+        startTurn(getMode(), !gameEndCondition, getTargetFishBal());
+    }
+
+    public void startTurn(String mode, boolean gameEndCondition, int targetFishBal) {
+        System.out.println(getTurns());
+        System.out.println(getTurnLimit());
         do {
             int totalFishesOwed = 0;
             setTotalFishesOwed(totalFishesOwed);
@@ -380,19 +430,18 @@ public class Game {
             int playSelection = getPlayerSelection(1,3,"Please make a selection");
             setPlayerSelection(playSelection);
             deductFishes(getTotalFishesOwed());
-            if (getHunter().getFishesSize() > 0)
+            System.out.println(getTurns() );
+            if (mode.equals(STORY) && getTurns() >= getTurnLimit())
+                gameEndCondition = false;
+            else
                 incrementTurn();
-        } while (getHunter().getFishesSize() > 0);
-        System.out.println(getMenu().getGameOverMenu());
-        System.out.println("Game Over! You ran out of fish!");
-    }
-
-    public void startStoryMode() {
-
-    }
-
-    public void startTurn() {
-
+        } while (gameEndCondition);
+        if (mode.equals(STORY) && ((getHunter().getFishesSize() >= targetFishBal * 0.9 && getHunter().getFishesSize() <= targetFishBal * 1.1) || getHunter().getFishesSize() > targetFishBal)) {
+            System.out.println(getMenu().getGameWinMenu());
+            setWin(true);
+        }
+        else
+            System.out.println(getMenu().getGameOverMenu());
     }
 
     public static void startGame() {
@@ -417,11 +466,7 @@ public class Game {
 
     public void writeFile(String mode) {
         FileIO fileIO = new FileIO("score.txt");
-        switch (mode) {
-            case ARCADE:
-                fileIO.writeFile(getGameResult());
-                break;
-        }
+        fileIO.writeFile(getGameResult());
     }
 
 }
