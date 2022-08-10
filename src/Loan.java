@@ -34,6 +34,10 @@ public class Loan {
         return loanAmount;
     }
 
+    public int getLoanDueTurn() {
+        return loanDueTurn;
+    }
+
     public double getLoanInterest() {
         return loanInterest;
     }
@@ -42,12 +46,12 @@ public class Loan {
         return loanPayable;
     }
 
-    public int getLoanDueTurn() {
-        return loanDueTurn;
-    }
-
     public void setLoanAmount(int loanAmount) {
         this.loanAmount = loanAmount;
+    }
+
+    public void setLoanDueTurn(int loanDueTurn) {
+        this.loanDueTurn = loanDueTurn;
     }
 
     public void setLoanInterest(double loanInterest) {
@@ -56,9 +60,5 @@ public class Loan {
 
     public void setLoanPayable(int loanPayable) {
         this.loanPayable = loanPayable;
-    }
-
-    public void setLoanDueTurn(int loanDueTurn) {
-        this.loanDueTurn = loanDueTurn;
     }
 }

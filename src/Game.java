@@ -15,6 +15,7 @@ public class Game {
     final static private String ARCADE = "Arcade";
     final static private String STORY = "Story";
     final static private String WEAPONS_TEXTFILE = "weapons.txt";
+    final static private String SCORE_TEXTFILE = "score.txt";
 
     public Game() {
         mode = ARCADE;
@@ -28,18 +29,6 @@ public class Game {
         naturalDisasterPenalty = 0;
         totalFishesOwed = 0;
         isWin = false;
-    }
-
-    public Game(String mode, Hunter hunter) {
-        this.mode = mode;
-        this.hunter = hunter;
-    }
-
-    public String display() {
-        return "Game{" +
-                "mode='" + mode + '\'' +
-                ", hunter=" + hunter +
-                '}';
     }
 
     public void borrowFish() {
@@ -121,12 +110,24 @@ public class Game {
             }
 
         }
+    }
 
-
+    public void deductFishes(int num) {
+        if (num < getHunter().getFishesSize()) {
+            getHunter().removeFishes(num);
+        }
+        else {
+            getHunter().removeFishes(getHunter().getFishesSize());
+        }
+        System.out.println("Fishes deducted: " + Menu.ANSI_RED + "-" + num + Menu.ANSI_RESET);
     }
 
     public int genRandomFishNo(int min, int max) {
         return (int)(Math.random()*(max-min+1)+min);
+    }
+
+    public int getDailyFish() {
+        return dailyFish;
     }
 
     public int getDailyInsurancePremium() {
@@ -146,9 +147,6 @@ public class Game {
         return result;
     }
 
-    public int getNaturalDisasterPenalty() {
-        return this.naturalDisasterPenalty;
-    }
     public Hunter getHunter() {
         return hunter;
     }
@@ -157,24 +155,12 @@ public class Game {
         return mode;
     }
 
+    public int getNaturalDisasterPenalty() {
+        return this.naturalDisasterPenalty;
+    }
+
     public Menu getMenu() {
         return menu;
-    }
-
-    public int getTurns() {
-        return turns;
-    }
-
-    public int getTurnLimit() {
-        return turnLimit;
-    }
-
-    public int getTargetFishBal() {
-        return targetFishBal;
-    }
-
-    public int getDailyFish() {
-        return dailyFish;
     }
 
     public void getPlayerLoansDisplay() {
@@ -210,62 +196,20 @@ public class Game {
         return choice;
     }
 
+    public int getTargetFishBal() {
+        return targetFishBal;
+    }
+
     public int getTotalFishesOwed() {
         return totalFishesOwed;
     }
 
-    public boolean isWin() {
-        return isWin;
+    public int getTurns() {
+        return turns;
     }
 
-    public void incrementTurn() {
-        this.turns++;
-    }
-
-    public boolean isNaturalDisaster() {
-        double chanceOfDisaster = Math.random();
-        return chanceOfDisaster < 0.01;
-    }
-
-    public static void main(String[] args) {
-        startGame();
-    }
-
-    public void promptGameMode() {
-        System.out.println(getMenu().getStartMenu());
-        System.out.println(getMenu().getGameModeSelectionMenu());
-    }
-
-    public void promptPlayerMenu() {
-        System.out.println(getMenu().getPlayerMenu());
-    }
-
-    public void readFile(String fileName) {
-        FileIO fileIO = new FileIO(fileName);
-        String[] fileContents = fileIO.readFile().split("\n");
-        int counter = 0;
-
-        for (String lineContent : fileContents) {
-            String[] lineValues = lineContent.split(",");
-            String weaponName = lineValues[0];
-            int weaponDmg = Integer.parseInt(lineValues[1]);
-            String weaponStrong = lineValues[2];
-            String weaponWeak = lineValues[3];
-            int weaponCost = Integer.parseInt(lineValues[4]);
-            int weaponMin = Integer.parseInt(lineValues[5]);
-            int weaponMax = Integer.parseInt(lineValues[6]);
-            getHunter().addWeapon(new Weapon(weaponCost, weaponDmg, weaponMin, weaponMax, weaponName, weaponStrong, weaponWeak));
-        }
-    }
-
-    public void deductFishes(int num) {
-        if (num < getHunter().getFishesSize()) {
-            getHunter().removeFishes(num);
-        }
-        else {
-            getHunter().removeFishes(getHunter().getFishesSize());
-        }
-        System.out.println("Fishes deducted: " + Menu.ANSI_RED + "-" + num + Menu.ANSI_RESET);
+    public int getTurnLimit() {
+        return turnLimit;
     }
 
     public void handleLoans() {
@@ -285,6 +229,57 @@ public class Game {
             }
         }
     }
+
+    public void incrementTurn() {
+        this.turns++;
+    }
+
+    public boolean isNaturalDisaster() {
+        double chanceOfDisaster = Math.random();
+        return chanceOfDisaster < 0.01;
+    }
+
+    public boolean isWin() {
+        return isWin;
+    }
+
+    public static void main(String[] args) {
+        startGame();
+    }
+
+    public void promptGameMode() {
+        System.out.println(getMenu().getStartMenu());
+        System.out.println(getMenu().getGameModeSelectionMenu());
+    }
+
+    public void promptPlayerMenu() {
+        System.out.println(getMenu().getPlayerMenu());
+    }
+
+    public void readFile(String fileName) {
+        FileIO fileIO = new FileIO(fileName);
+        String[] fileContents = fileIO.readFile().split("\n");
+
+        for (String lineContent : fileContents) {
+            String[] lineValues = lineContent.split(",");
+            String weaponName = lineValues[0];
+            int weaponDmg = Integer.parseInt(lineValues[1]);
+            String weaponStrong = lineValues[2];
+            String weaponWeak = lineValues[3];
+            int weaponCost = Integer.parseInt(lineValues[4]);
+            int weaponMin = Integer.parseInt(lineValues[5]);
+            int weaponMax = Integer.parseInt(lineValues[6]);
+            getHunter().addWeapon(new Weapon(weaponCost, weaponDmg, weaponMin, weaponMax, weaponName, weaponStrong, weaponWeak));
+        }
+    }
+    public void setDailyFish(int dailyFish) {
+        this.dailyFish = dailyFish;
+    }
+
+    public void setDailyInsurancePremium(int newDailyInsurancePremium) {
+        this.dailyInsurancePremium = newDailyInsurancePremium;
+    }
+
     public void setGameMode(int selection) {
         switch (selection) {
             case 1:
@@ -307,47 +302,18 @@ public class Game {
         } while (!validation.lengthWithinRange(hunterName, 3, 12));
         getHunter().setName(hunterName);
     }
-
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public void setNaturalDisasterPenalty(int newNaturalDisasterPenalty) {
+        this.naturalDisasterPenalty = newNaturalDisasterPenalty;
     }
 
     public void setNoOfFishes(int num) {
         for (int i = 0; i < num; i++) {
             getHunter().addFish(new Fish());
         }
-    }
-
-    public void setHunter(Hunter hunter) {
-        this.hunter = hunter;
-    }
-
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
-
-    public void setTurns(int turns) {
-        this.turns = turns;
-    }
-
-    public void setTurnLimit(int turnLimit) {
-        this.turnLimit = turnLimit;
-    }
-
-    public void setTargetFishBal(int targetFishBal) {
-        this.targetFishBal = targetFishBal;
-    }
-
-    public void setDailyFish(int dailyFish) {
-        this.dailyFish = dailyFish;
-    }
-
-    public void setDailyInsurancePremium(int newDailyInsurancePremium) {
-        this.dailyInsurancePremium = newDailyInsurancePremium;
-    }
-
-    public void setNaturalDisasterPenalty(int newNaturalDisasterPenalty) {
-        this.naturalDisasterPenalty = newNaturalDisasterPenalty;
     }
 
     public void setPlayerSelection(int selection) {
@@ -363,8 +329,16 @@ public class Game {
         }
     }
 
+    public void setTargetFishBal(int targetFishBal) {
+        this.targetFishBal = targetFishBal;
+    }
+
     public void setTotalFishesOwed(int totalFishesOwed) {
         this.totalFishesOwed = totalFishesOwed;
+    }
+
+    public void setTurnLimit(int turnLimit) {
+        this.turnLimit = turnLimit;
     }
 
     public void setWin(boolean win) {
@@ -374,6 +348,26 @@ public class Game {
     public void startArcadeMode() {
         boolean gameContinue = getHunter().getFishesSize() < 0;
         startTurn(getMode(), gameContinue , 0);
+    }
+
+    public static void startGame() {
+        Game newGame = new Game();
+        newGame.readFile(WEAPONS_TEXTFILE);
+        newGame.promptGameMode();
+        int gameModeSelection = newGame.getPlayerSelection(1,2,"Please select a game mode");
+        newGame.setGameMode(gameModeSelection);
+        newGame.setHunterName();
+        newGame.setNoOfFishes(10);
+
+        switch (newGame.getMode()) {
+            case ARCADE:
+                newGame.startArcadeMode();
+                break;
+            case STORY:
+                newGame.startStoryMode();
+                break;
+        }
+        newGame.writeFile(SCORE_TEXTFILE);
     }
 
     public void startStoryMode() {
@@ -441,28 +435,8 @@ public class Game {
             System.out.println(getMenu().getGameOverMenu());
     }
 
-    public static void startGame() {
-        Game newGame = new Game();
-        newGame.readFile(WEAPONS_TEXTFILE);
-        newGame.promptGameMode();
-        int gameModeSelection = newGame.getPlayerSelection(1,2,"Please select a game mode");
-        newGame.setGameMode(gameModeSelection);
-        newGame.setHunterName();
-        newGame.setNoOfFishes(10);
-
-        switch (newGame.getMode()) {
-            case ARCADE:
-                newGame.startArcadeMode();
-                break;
-            case STORY:
-                newGame.startStoryMode();
-                break;
-        }
-        newGame.writeFile(newGame.getMode());
-    }
-
-    public void writeFile(String mode) {
-        FileIO fileIO = new FileIO("score.txt");
+    public void writeFile(String fileName) {
+        FileIO fileIO = new FileIO(fileName);
         fileIO.writeFile(getGameResult());
     }
 }
