@@ -1,0 +1,14 @@
+Mode: Arcade, Player name: bob, Days lasted: 1
+Mode: Arcade, Player name: bob, Days lasted: 1
+Mode: Arcade, Player name: jacandkill, Days lasted: 1
+Mode: Arcade, Player name: umbrella, Days lasted: 6
+Mode: Arcade, Player name: bob, Days lasted: 1
+Mode: Arcade, Player name: bob, Days lasted: 3
+Mode: Arcade, Player name: bob, Days lasted: 1
+Mode: Arcade, Player name: bob, Days lasted: 1
+Mode: Arcade, Player name: bob, Days lasted: 1
+"Mode: Story, Player name: fgas, Number of turns: 5, Target fish balance: 25, Final fish balance: &d, 45
+Mode: Story, Player name: yoma, Number of turns: 5, Target fish balance: 25, Final fish balance: 49, Lose
+Mode: Story, Player name: bob, Number of turns: 5, Target fish balance: 25, Final fish balance: 80, Outcome: Win
+Mode: Arcade, Player name: bob, Days lasted: 2
+Mode: Story, Player name: bob, Number of turns: 5, Target fish balance: 25, Final fish balance:  0, Outcome: Lose

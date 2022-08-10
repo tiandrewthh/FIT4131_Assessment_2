@@ -15,10 +15,7 @@ public class Game {
     final static private String ARCADE = "Arcade";
     final static private String STORY = "Story";
     final static private String WEAPONS_TEXTFILE = "weapons.txt";
-    final static public String ANSI_RESET = "\u001B[0m";
-    final static public String ANSI_GREEN = "\u001B[32m";
-    final static public String ANSI_RED = "\u001B[31m";
-    final static public String ANSI_BLUE = "\u001B[34m";
+
     public Game() {
         mode = ARCADE;
         hunter = new Hunter();
@@ -60,15 +57,15 @@ public class Game {
                         isValid = true;
                     }
                     else
-                        System.out.println(ANSI_RED + "Not a valid amount" + ANSI_RESET);
+                        System.out.println(Menu.ANSI_RED + "Not a valid amount" + Menu.ANSI_RESET);
                 }
                 catch (Exception e) {
-                    System.out.println(ANSI_RED + "Please enter a valid number" + ANSI_RESET);
+                    System.out.println(Menu.ANSI_RED + "Please enter a valid number" + Menu.ANSI_RESET);
                 }
             }
         }
         else {
-            System.out.println(ANSI_RED + "Loan amount exceeds 100. Cannot borrow anymore");
+            System.out.println(Menu.ANSI_RED + "Loan amount exceeds 100. Cannot borrow anymore");
         }
 
     }
@@ -93,11 +90,11 @@ public class Game {
             int caughtFish = genRandomFishNo(selectedWeapon.getMinFish(), selectedWeapon.getMaxFish());
             if (selectedWeapon.getStrongAgainst().equals(randomFish.getType())) {
                 caughtFish *= 2;
-                System.out.printf(ANSI_GREEN + "DOUBLE FISH CAUGHT! %s is strong against %s\n" + ANSI_RESET, selectedWeapon.getName(), randomFish.getType());
+                System.out.printf(Menu.ANSI_GREEN + "DOUBLE FISH CAUGHT! %s is strong against %s\n" + Menu.ANSI_RESET, selectedWeapon.getName(), randomFish.getType());
             }
             else if (selectedWeapon.getWeakAgainst().equals(randomFish.getType())) {
                 caughtFish /= 2;
-                System.out.printf(ANSI_RED + "HALF FISH CAUGHT! %s is weak against %s\n" + ANSI_RESET, selectedWeapon.getName(), randomFish.getType());
+                System.out.printf(Menu.ANSI_RED + "HALF FISH CAUGHT! %s is weak against %s\n" + Menu.ANSI_RESET, selectedWeapon.getName(), randomFish.getType());
             }
 
             System.out.printf("Hunter %s caught %d %s fishes with %s\n", getHunter().getName(), caughtFish, randomFish.getType(), selectedWeapon.getName());
@@ -204,10 +201,10 @@ public class Game {
                 if (choice >= min && choice <= max)
                     isValid = true;
                 else
-                    System.out.println(ANSI_RED + "Please enter a valid selection" + ANSI_RESET);
+                    System.out.println(Menu.ANSI_RED + "Please enter a valid selection" + Menu.ANSI_RESET);
             }
             catch (Exception e) {
-                System.out.println(ANSI_RED + "Selection is not a number" + ANSI_RED);
+                System.out.println(Menu.ANSI_RED + "Selection is not a number" + Menu.ANSI_RED);
             }
         }
         return choice;
@@ -268,7 +265,7 @@ public class Game {
         else {
             getHunter().removeFishes(getHunter().getFishesSize());
         }
-        System.out.println("Fishes deducted: " + ANSI_RED + "-" + num + ANSI_RESET);
+        System.out.println("Fishes deducted: " + Menu.ANSI_RED + "-" + num + Menu.ANSI_RESET);
     }
 
     public void handleLoans() {
@@ -276,7 +273,7 @@ public class Game {
             for (Loan loan : getHunter().getLoans()) {
                 if (loan.getLoanDueTurn() == 0) {
                     setTotalFishesOwed(getTotalFishesOwed() + loan.getLoanPayable());
-                    System.out.println("Loan payable added to total fishes owed: " + ANSI_RED + loan.getLoanPayable() + ANSI_RESET);
+                    System.out.println("Loan payable added to total fishes owed: " + Menu.ANSI_RED + loan.getLoanPayable() + Menu.ANSI_RESET);
                     getHunter().removeLoan(loan);
                     // Escape loop if number of loans is less than or equal to 0
                     if (getHunter().getLoanSize() <= 0)
@@ -292,11 +289,11 @@ public class Game {
         switch (selection) {
             case 1:
                 setMode(ARCADE);
-                System.out.println(ANSI_GREEN + "Arcade mode selected" + ANSI_RESET);
+                System.out.println(Menu.ANSI_GREEN + "Arcade mode selected" + Menu.ANSI_RESET);
                 break;
             case 2:
                 setMode(STORY);
-                System.out.println(ANSI_GREEN + "Story mode selected" + ANSI_RESET);
+                System.out.println(Menu.ANSI_GREEN + "Story mode selected" + Menu.ANSI_RESET);
                 break;
         }
     }
@@ -375,8 +372,8 @@ public class Game {
     }
 
     public void startArcadeMode() {
-        boolean gameEndCondtion = getHunter().getFishesSize() < 0;
-        startTurn(getMode(), gameEndCondtion , 0);
+        boolean gameContinue = getHunter().getFishesSize() < 0;
+        startTurn(getMode(), gameContinue , 0);
     }
 
     public void startStoryMode() {
@@ -401,11 +398,11 @@ public class Game {
         }
         setTurnLimit(turnsLimit);
         setTargetFishBal(targetFishBalance);
-        boolean gameEndCondition = getTurns() > getTurnLimit();
-        startTurn(getMode(), !gameEndCondition, getTargetFishBal());
+        boolean gameContinue = getTurns() > getTurnLimit();
+        startTurn(getMode(), !gameContinue, getTargetFishBal());
     }
 
-    public void startTurn(String mode, boolean gameEndCondition, int targetFishBal) {
+    public void startTurn(String mode, boolean gameContinue, int targetFishBal) {
         System.out.println(getTurns());
         System.out.println(getTurnLimit());
         do {
@@ -415,7 +412,7 @@ public class Game {
             setDailyInsurancePremium(genRandomFishNo(1, 10));
             if (isNaturalDisaster()) {
                 setNaturalDisasterPenalty(genRandomFishNo(50, 100));
-                System.out.printf(ANSI_RED + "Natural disaster has occurred. Lose %d fishes\n" + ANSI_RESET, getNaturalDisasterPenalty());
+                System.out.printf(Menu.ANSI_RED + "Natural disaster has occurred. Lose %d fishes\n" + Menu.ANSI_RESET, getNaturalDisasterPenalty());
             }
 
             totalFishesOwed += getDailyFish() + getDailyInsurancePremium() + getNaturalDisasterPenalty();
@@ -432,10 +429,10 @@ public class Game {
             deductFishes(getTotalFishesOwed());
             System.out.println(getTurns() );
             if (mode.equals(STORY) && getTurns() >= getTurnLimit())
-                gameEndCondition = false;
+                gameContinue = false;
             else
                 incrementTurn();
-        } while (gameEndCondition);
+        } while (gameContinue);
         if (mode.equals(STORY) && ((getHunter().getFishesSize() >= targetFishBal * 0.9 && getHunter().getFishesSize() <= targetFishBal * 1.1) || getHunter().getFishesSize() > targetFishBal)) {
             System.out.println(getMenu().getGameWinMenu());
             setWin(true);
@@ -468,5 +465,4 @@ public class Game {
         FileIO fileIO = new FileIO("score.txt");
         fileIO.writeFile(getGameResult());
     }
-
 }
