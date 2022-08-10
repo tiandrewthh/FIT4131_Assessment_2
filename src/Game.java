@@ -346,7 +346,7 @@ public class Game {
     }
 
     public void startArcadeMode() {
-        boolean gameContinue = getHunter().getFishesSize() < 0;
+        boolean gameContinue = getHunter().getFishesSize() > 0;
         startTurn(getMode(), gameContinue , 0);
     }
 
@@ -392,7 +392,7 @@ public class Game {
         }
         setTurnLimit(turnsLimit);
         setTargetFishBal(targetFishBalance);
-        boolean gameContinue = getTurns() > getTurnLimit();
+        boolean gameContinue = getTurns() >= getTurnLimit();
         startTurn(getMode(), !gameContinue, getTargetFishBal());
     }
 
@@ -413,16 +413,18 @@ public class Game {
             setTotalFishesOwed(totalFishesOwed);
             handleLoans();
             getPlayerMenuStats(getTurns(), getHunter().getFishesSize(), getDailyFish(), getDailyInsurancePremium(), getTotalFishesOwed());
-            // prompt player menu
             // If hunter does have loan, then display loans
             if (getHunter().getLoanSize() > 0)
                 getPlayerLoansDisplay();
+
             promptPlayerMenu();
             int playSelection = getPlayerSelection(1,3,"Please make a selection");
             setPlayerSelection(playSelection);
             deductFishes(getTotalFishesOwed());
-            System.out.println(getTurns() );
+            // Lose condition
             if (mode.equals(STORY) && getTurns() >= getTurnLimit())
+                gameContinue = false;
+            else if (mode.equals(ARCADE) && getHunter().getFishesSize() <= 0)
                 gameContinue = false;
             else
                 incrementTurn();
