@@ -11,18 +11,32 @@ import java.io.FileWriter;
 public class FileIO {
     private String fileName;
 
+    /**
+     * Default constructor to create an object of FileIO class
+     */
     public FileIO() {
         fileName = "weapons.txt";
     }
 
+    /**
+     * Non-default constructor to create an object of FileIO class
+     * @param fileName          The file name as a String
+     */
     public FileIO(String fileName) {
         this.fileName = fileName;
     }
 
+    /**
+     * Accessor to get the name of a file
+     * @return                  The name of a file as a String
+     */
     public String getFileName() {
         return fileName;
     }
 
+    /**
+     * @return
+     */
     public String readFile() {
         String fileContents = "";
         try {
@@ -43,10 +57,16 @@ public class FileIO {
         return fileContents;
     }
 
+    /**
+     * @param fileName
+     */
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
+    /**
+     * @param input
+     */
     public void writeFile(String input) {
         try {
             FileWriter writer = new FileWriter(fileName, true);

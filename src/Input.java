@@ -7,10 +7,18 @@ import java.util.Scanner;
  * @version ver1.0.0
  */
 public class Input {
+    /**
+     * Default constructor to create an object of Input class
+     */
     public Input() {
 
     }
 
+    /**
+     * Method to accept and return character input
+     * @param input             The prompt of the input as a String
+     * @return                  The input as a char
+     */
     public char acceptCharInput(String input) {
         System.out.println(input);
         Scanner console = new Scanner(System.in);
@@ -18,6 +26,11 @@ public class Input {
         return charInput;
     }
 
+    /**
+     * Method to accept and return double input
+     * @param input             The prompt of the input as a String
+     * @return                  The input as double
+     */
     public double acceptDoubleInput(String input) {
         System.out.println(input);
         Scanner console = new Scanner(System.in);
@@ -25,6 +38,11 @@ public class Input {
         return doubleInput;
     }
 
+    /**
+     * Method to accept and return int input
+     * @param input             The prompt of the input as a String
+     * @return                  The input as an int
+     */
     public int acceptIntegerInput(String input) {
         System.out.println(input);
         Scanner console = new Scanner(System.in);
@@ -33,6 +51,11 @@ public class Input {
 
     }
 
+    /**
+     * Method to accept and return String
+     * @param input         The prompt of the input as a String
+     * @return              The input as a String
+     */
     public String acceptStringInput(String input) {
         System.out.println(input);
         Scanner console = new Scanner(System.in);

@@ -46,63 +46,71 @@ public class Loan {
     }
 
     /**
-     *
+     * Method to decrement the amount of turns left till a loan is due
      */
     public void decrementLoanTurn() {
         loanDueTurn--;
     }
 
     /**
-     * @return
+     * Accessor method to get the loan amount
+     * @return                  The loan amount as an int
      */
     public int getLoanAmount() {
         return loanAmount;
     }
 
     /**
-     * @return
+     * Accessor method to get the number of turns a loan is due in
+     * @return                  The number of turns a loan is due in as an int
      */
     public int getLoanDueTurn() {
         return loanDueTurn;
     }
 
     /**
-     * @return
+     * Accessor method to get the interest of a loan
+     * @return                  The interest of a loan as a double
      */
     public double getLoanInterest() {
         return loanInterest;
     }
 
     /**
-     * @return
+     * Accessor method to get the loan payable
+     * @return                  The loan payable as an int
      */
     public int getLoanPayable() {
         return loanPayable;
     }
 
     /**
-     * @param loanAmount
+     *  loan amount
+     * @param loanAmount        The loan amount as an int
      */
     public void setLoanAmount(int loanAmount) {
         this.loanAmount = loanAmount;
     }
 
     /**
-     * @param loanDueTurn
+     * Mutator method to set the number of turns a loan is due in
+     * @param loanDueTurn       The number of turns a loan is due in as an int
      */
     public void setLoanDueTurn(int loanDueTurn) {
         this.loanDueTurn = loanDueTurn;
     }
 
     /**
-     * @param loanInterest
+     * Mutator method to set the interest of a loan
+     * @param loanInterest      The interest of a loan as a double
      */
     public void setLoanInterest(double loanInterest) {
         this.loanInterest = loanInterest;
     }
 
     /**
-     * @param loanPayable
+     * Mutator method to set the loan amount that is payable
+     * @param loanPayable       The loan payable as an int
      */
     public void setLoanPayable(int loanPayable) {
         this.loanPayable = loanPayable;
