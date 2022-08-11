@@ -1,3 +1,9 @@
+/**
+ * Class which stores information about validation
+ *
+ * @author Andrew
+ * @version ver1.0.0
+ */
 public class Validation {
 
     public boolean isBlank(String input){

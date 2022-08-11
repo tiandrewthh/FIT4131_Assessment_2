@@ -1,5 +1,12 @@
+/**
+ * Class which stores information and logic about the Penguin game
+ *
+ * @author Andrew
+ * @version ver1.0.0
+ */
 import java.lang.Math;
 import java.util.ArrayList;
+
 public class Game {
     private Hunter hunter;
     private String mode;

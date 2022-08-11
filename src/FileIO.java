@@ -1,3 +1,9 @@
+/**
+ * Class which stores information about reading and writing to a file
+ *
+ * @author Andrew
+ * @version ver1.0.0
+ */
 import java.util.Scanner;
 import java.io.FileReader;
 import java.io.FileWriter;
