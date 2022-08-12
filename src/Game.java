@@ -77,20 +77,15 @@ public class Game {
      */
     public void catchFish() {
         Input input = new Input();
-        ArrayList<Weapon> weapons = getHunter().getWeapons();
         int huntTurns = 2;
         char huntContinue = 'y';
+        // Two hunt turns
         while (huntTurns > 0 && huntContinue == 'y') {
-            int selection = 1;
             System.out.println(getMenu().getHuntMenuStats(huntTurns, getHunter().getFishesSize(), getTotalFishesOwed()));
-            for (Weapon weapon : weapons) {
-                System.out.println(getMenu().getWeaponMenu(selection, weapon.display()));
-                selection++;
-            }
-            int weaponSelection = getPlayerSelection(1, weapons.size(),"Please select a weapon to hunt fish with");
-            Weapon selectedWeapon = weapons.get(weaponSelection - 1);
+            displayWeapons();
+            Weapon selectedWeapon = useWeapon();
             deductFishes(selectedWeapon.getCost());
-            System.out.println();
+
             Fish randomFish = new Fish();
             int caughtFish = genRandomFishNo(selectedWeapon.getMinFish(), selectedWeapon.getMaxFish());
             if (selectedWeapon.getStrongAgainst().equals(randomFish.getType())) {
@@ -180,6 +175,16 @@ public class Game {
      */
     public void displayPlayerMenuStats(int turns, int fishes, int fishesToFamily, int insurance, int totalFishesOwed) {
         System.out.println(getMenu().getPlayerMenuStats(turns, fishes, fishesToFamily, insurance, totalFishesOwed));
+    }
+
+    public void displayWeapons() {
+        ArrayList<Weapon> weapons = getHunter().getWeapons();
+        // Display list of weapons
+        int selection = 1;
+        for (Weapon weapon : weapons) {
+            System.out.println(getMenu().getWeaponMenu(selection, weapon.display()));
+            selection++;
+        }
     }
 
     /**
@@ -616,6 +621,12 @@ public class Game {
         }
         else
             System.out.println(getMenu().getGameOverMenu());
+    }
+
+    public Weapon useWeapon() {
+        ArrayList<Weapon> weapons = getHunter().getWeapons();
+        int weaponSelection = getPlayerSelection(1, weapons.size(),"Please select a weapon to hunt fish with");
+        return weapons.get(weaponSelection - 1);
     }
 
     /**

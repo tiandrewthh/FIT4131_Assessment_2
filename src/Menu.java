@@ -71,7 +71,7 @@ public class Menu {
         return ("====================================\n" +
                 ANSI_GREEN + "Hunts left: " + ANSI_RESET + huntTurns + "\n" +
                 ANSI_BLUE + "Fishes: " + ANSI_RESET + fishes + "\n" +
-                ANSI_RED + "Total fishes owed: " + ANSI_RESET + fishesOwed + "\n");
+                ANSI_RED + "Total fishes owed: " + ANSI_RESET + fishesOwed);
     }
 
     /**
