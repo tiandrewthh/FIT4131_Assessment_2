@@ -24,6 +24,9 @@ public class Game {
     final static private String WEAPONS_TEXTFILE = "weapons.txt";
     final static private String SCORE_TEXTFILE = "score.txt";
 
+    /**
+     * Default constructor to create an object of Game class
+     */
     public Game() {
         mode = ARCADE;
         hunter = new Hunter();
@@ -38,6 +41,9 @@ public class Game {
         isWin = false;
     }
 
+    /**
+     * Method to borrow fishes as a loan
+     */
     public void borrowFish() {
         Input input = new Input();
         boolean isValid = false;
@@ -47,7 +53,7 @@ public class Game {
                 try {
                     int loanAmount = input.acceptIntegerInput("Please choose a loan amount between 30 and 100");
                     if (loanAmount >= 30 && loanAmount <= 100) {
-                        System.out.printf("Borrowed %d fishes at 50 percent interest\n", loanAmount);
+                        System.out.printf("Borrowed" + Menu.ANSI_GREEN + " +%d " + Menu.ANSI_RESET + "fishes at 50 percent interest\n", loanAmount);
                         getHunter().addSpecificLoan(loanAmount, 1.5, 3);
                         getHunter().addFishes(loanAmount);
                         isValid = true;
@@ -66,6 +72,9 @@ public class Game {
 
     }
 
+    /**
+     * Method to catch fishes using a weapon
+     */
     public void catchFish() {
         Input input = new Input();
         ArrayList<Weapon> weapons = getHunter().getWeapons();
@@ -93,7 +102,7 @@ public class Game {
                 System.out.printf(Menu.ANSI_RED + "HALF FISH CAUGHT! %s is weak against %s\n" + Menu.ANSI_RESET, selectedWeapon.getName(), randomFish.getType());
             }
 
-            System.out.printf("Hunter %s caught %d %s fishes with %s\n", getHunter().getName(), caughtFish, randomFish.getType(), selectedWeapon.getName());
+            System.out.printf("Hunter %s caught " + Menu.ANSI_GREEN + "+%d" + Menu.ANSI_RESET + " %s fishes with %s\n", getHunter().getName(), caughtFish, randomFish.getType(), selectedWeapon.getName());
             for (int i = 0; i < caughtFish; i++)
                 getHunter().addFish(new Fish(randomFish.getType()));
 
@@ -119,6 +128,10 @@ public class Game {
         }
     }
 
+    /**
+     * Method to deduct fishes
+     * @param num               The number of fishes to deduct as an int
+     */
     public void deductFishes(int num) {
         if (num < getHunter().getFishesSize()) {
             getHunter().removeFishes(num);
@@ -129,18 +142,76 @@ public class Game {
         System.out.println("Fishes deducted: " + Menu.ANSI_RED + "-" + num + Menu.ANSI_RESET);
     }
 
+    /**
+     * Display method to output game mode selection on the console
+     */
+    public void displayGameMode() {
+        System.out.println(getMenu().getStartMenu());
+        System.out.println(getMenu().getGameModeSelectionMenu());
+    }
+
+    /**
+     * Display method to return the state of a player's loans
+     */
+    public void displayPlayerLoans() {
+        String[] strLoans = new String[getHunter().getLoanSize()];
+        int index = 0;
+        for (Loan loan : getHunter().getLoans()) {
+            strLoans[index] = loan.display();
+            index++;
+        }
+        System.out.println(getMenu().getPlayerLoans(strLoans));
+    }
+
+    /**
+     * Display method to show the player's menu selection on the console
+     */
+    public void displayPlayerMenu() {
+        System.out.println(getMenu().getPlayerMenu());
+    }
+
+    /**
+     * Display method to return the state of a player's stats
+     * @param turns             The number of turns elapsed as an int
+     * @param fishes            The number of fishes a player has as an int
+     * @param fishesToFamily    The number of fishes required to feed a family as an int
+     * @param insurance         The number of fishes to pay as an insurance as an int
+     * @param totalFishesOwed   The total number of fishes owing as an int
+     */
+    public void displayPlayerMenuStats(int turns, int fishes, int fishesToFamily, int insurance, int totalFishesOwed) {
+        System.out.println(getMenu().getPlayerMenuStats(turns, fishes, fishesToFamily, insurance, totalFishesOwed));
+    }
+
+    /**
+     * Method to get a random amount of fish
+     * @param min               The lower range as an int
+     * @param max               The upper range as an int
+     * @return                  The random amount of fish as an int
+     */
     public int genRandomFishNo(int min, int max) {
         return (int)(Math.random()*(max-min+1)+min);
     }
 
+    /**
+     * Accessor method to get the daily amount of fish required to feed the family
+     * @return                 The daily amount of fish to feed family as an int
+     */
     public int getDailyFish() {
         return dailyFish;
     }
 
+    /**
+     * Accessor method to get the daily insurance premium
+     * @return                  The daily insurance premium as an int
+     */
     public int getDailyInsurancePremium() {
         return this.dailyInsurancePremium;
     }
 
+    /**
+     * Accessor method to get the outcome of a game
+     * @return                  The outcome of a game as a String
+     */
     public String getGameResult() {
         String result = "";
         String gameOutcome = isWin() ? "Win" : "Lose";
@@ -154,36 +225,45 @@ public class Game {
         return result;
     }
 
+    /**
+     * Accessor method to get an object of Hunter class
+     * @return                  The object of Hunter class
+     */
     public Hunter getHunter() {
         return hunter;
     }
 
+    /**
+     * Accessor method to get the game mode
+     * @return                  The game mode as a String
+     */
     public String getMode() {
         return mode;
     }
 
+    /**
+     * Accessor method to get the natural disaster penalty
+     * @return                  The natural disaster penalty as an int
+     */
     public int getNaturalDisasterPenalty() {
         return this.naturalDisasterPenalty;
     }
 
+    /**
+     * Accessor method to get an object of Menu class
+     * @return                  The object of Menu class
+     */
     public Menu getMenu() {
         return menu;
     }
 
-    public void getPlayerLoansDisplay() {
-        String[] strLoans = new String[getHunter().getLoanSize()];
-        int index = 0;
-        for (Loan loan : getHunter().getLoans()) {
-            strLoans[index] = loan.display();
-            index++;
-        }
-        System.out.println(getMenu().getPlayerLoans(strLoans));
-    }
-
-    public void getPlayerMenuStats(int turns, int fishes, int fishesToFamily, int insurance, int totalFishesOwed) {
-        System.out.println(getMenu().getPlayerMenuStats(turns, fishes, fishesToFamily, insurance, totalFishesOwed));
-    }
-
+    /**
+     * Accessor method to get the player's selection
+     * @param min               The minimum amount of selections as an int
+     * @param max               The maximum amount of selections as an int
+     * @param menuPrompt        The menu's prompt as a String
+     * @return                  The player's selection as an int
+     */
     public int getPlayerSelection(int min, int max, String menuPrompt) {
         Input input = new Input();
         boolean isValid = false;
@@ -203,22 +283,41 @@ public class Game {
         return choice;
     }
 
+    /**
+     * Accessor method to get the target fish balance of the game
+     * @return                  The target fish balance as an int
+     */
     public int getTargetFishBal() {
         return targetFishBal;
     }
 
+    /**
+     * Accessor method to get the total amount of fishes owing during a turn
+     * @return                  The total amount of fishes owed as an int
+     */
     public int getTotalFishesOwed() {
         return totalFishesOwed;
     }
 
+    /**
+     * Accessor method to get the turns of a game
+     * @return                  The turns of a game as an int
+     */
     public int getTurns() {
         return turns;
     }
 
+    /**
+     * Accessor method to get the turn limit of a game
+     * @return                  The turn limit as an int
+     */
     public int getTurnLimit() {
         return turnLimit;
     }
 
+    /**
+     * Method to handle loans during a turn
+     */
     public void handleLoans() {
         if (getHunter().getLoanSize() > 0) {
             for (Loan loan : getHunter().getLoans()) {
@@ -237,33 +336,43 @@ public class Game {
         }
     }
 
+    /**
+     * Method to increment a turn during a game
+     */
     public void incrementTurn() {
         this.turns++;
     }
 
+    /**
+     * Accessor method to get a natural disaster
+     * @return                  The natural disaster as a boolean
+     */
     public boolean isNaturalDisaster() {
         double chanceOfDisaster = Math.random();
         return chanceOfDisaster < 0.01;
     }
 
+    /**
+     * Accessor method to get the outcome of game
+     * @return                  The outcome of a game as a boolean
+     */
     public boolean isWin() {
         return isWin;
     }
 
+    /**
+     * Method to begin the program
+     * @param args              An array of Strings representing command line arguments
+     */
     public static void main(String[] args) {
         startGame();
     }
 
-    public void promptGameMode() {
-        System.out.println(getMenu().getStartMenu());
-        System.out.println(getMenu().getGameModeSelectionMenu());
-    }
-
-    public void promptPlayerMenu() {
-        System.out.println(getMenu().getPlayerMenu());
-    }
-
-    public void readFile(String fileName) {
+    /**
+     * Method to read a file to a weapon object
+     * @param fileName          The filename as a String
+     */
+    public void readFileToWeapon(String fileName) {
         FileIO fileIO = new FileIO(fileName);
         String[] fileContents = fileIO.readFile().split("\n");
 
@@ -279,14 +388,27 @@ public class Game {
             getHunter().addWeapon(new Weapon(weaponCost, weaponDmg, weaponMin, weaponMax, weaponName, weaponStrong, weaponWeak));
         }
     }
+
+    /**
+     * Mutator method to set the daily fish required to feed a family
+     * @param dailyFish         The daily fish as an int
+     */
     public void setDailyFish(int dailyFish) {
         this.dailyFish = dailyFish;
     }
 
+    /**
+     * Mutator method to set the daily fish insurance premium
+     * @param newDailyInsurancePremium  The daily insurance premium as an int
+     */
     public void setDailyInsurancePremium(int newDailyInsurancePremium) {
         this.dailyInsurancePremium = newDailyInsurancePremium;
     }
 
+    /**
+     * Mutator method to set the selection of the game mode
+     * @param selection         The selection as an int
+     */
     public void setGameMode(int selection) {
         switch (selection) {
             case 1:
@@ -300,6 +422,9 @@ public class Game {
         }
     }
 
+    /**
+     * Mutator method to set the name of a hunter
+     */
     public void setHunterName() {
         Input input = new Input();
         Validation validation = new Validation();
@@ -309,20 +434,37 @@ public class Game {
         } while (!validation.lengthWithinRange(hunterName, 3, 12));
         getHunter().setName(hunterName);
     }
+
+    /**
+     * Mutator method to set the mode of a game
+     * @param mode              The mode of a game as a String
+     */
     public void setMode(String mode) {
         this.mode = mode;
     }
 
+    /**
+     * Mutator method to set the natural disaster penalty during a game turn
+     * @param newNaturalDisasterPenalty     The natural disaster penalty as an int
+     */
     public void setNaturalDisasterPenalty(int newNaturalDisasterPenalty) {
         this.naturalDisasterPenalty = newNaturalDisasterPenalty;
     }
 
+    /**
+     * Mutator method to set the number of fishes to add to a hunter's balance
+     * @param num               The number of fishes as an int
+     */
     public void setNoOfFishes(int num) {
         for (int i = 0; i < num; i++) {
             getHunter().addFish(new Fish());
         }
     }
 
+    /**
+     * Mutator method to set the player's selection for a specific action during a turn
+     * @param selection         The selection of a player as an int
+     */
     public void setPlayerSelection(int selection) {
         switch (selection) {
             case 1:
@@ -336,31 +478,53 @@ public class Game {
         }
     }
 
+    /**
+     * Mutator method to set the player's target fish balance by the end of the game
+     * @param targetFishBal     The target fish balance of a game as an int
+     */
     public void setTargetFishBal(int targetFishBal) {
         this.targetFishBal = targetFishBal;
     }
 
+    /**
+     * Mutator method to set the total amount of fishes owed by a player
+     * @param totalFishesOwed
+     */
     public void setTotalFishesOwed(int totalFishesOwed) {
         this.totalFishesOwed = totalFishesOwed;
     }
 
+    /**
+     * Mutator method to set the
+     * @param turnLimit
+     */
     public void setTurnLimit(int turnLimit) {
         this.turnLimit = turnLimit;
     }
 
+    /**
+     * Mutator method to set the
+     * @param win
+     */
     public void setWin(boolean win) {
         isWin = win;
     }
 
+    /**
+     *
+     */
     public void startArcadeMode() {
         boolean gameContinue = getHunter().getFishesSize() > 0;
         startTurn(getMode(), gameContinue , 0);
     }
 
+    /**
+     *
+     */
     public static void startGame() {
         Game newGame = new Game();
-        newGame.readFile(WEAPONS_TEXTFILE);
-        newGame.promptGameMode();
+        newGame.readFileToWeapon(WEAPONS_TEXTFILE);
+        newGame.displayGameMode();
         int gameModeSelection = newGame.getPlayerSelection(1,2,"Please select a game mode");
         newGame.setGameMode(gameModeSelection);
         newGame.setHunterName();
@@ -415,16 +579,16 @@ public class Game {
                 setNaturalDisasterPenalty(genRandomFishNo(50, 100));
                 System.out.printf(Menu.ANSI_RED + "Natural disaster has occurred. Lose %d fishes\n" + Menu.ANSI_RESET, getNaturalDisasterPenalty());
             }
-
+            // Set fishes to be owed by the end of a turn
             totalFishesOwed += getDailyFish() + getDailyInsurancePremium() + getNaturalDisasterPenalty();
             setTotalFishesOwed(totalFishesOwed);
-            handleLoans();
-            getPlayerMenuStats(getTurns(), getHunter().getFishesSize(), getDailyFish(), getDailyInsurancePremium(), getTotalFishesOwed());
+            handleLoans(); // Handle any loans
+            displayPlayerMenuStats(getTurns(), getHunter().getFishesSize(), getDailyFish(), getDailyInsurancePremium(), getTotalFishesOwed());
             // If hunter does have loan, then display loans
             if (getHunter().getLoanSize() > 0)
-                getPlayerLoansDisplay();
-
-            promptPlayerMenu();
+                displayPlayerLoans();
+            // Player selection
+            displayPlayerMenu();
             int playSelection = getPlayerSelection(1,3,"Please make a selection");
             setPlayerSelection(playSelection);
             deductFishes(getTotalFishesOwed());
@@ -434,8 +598,9 @@ public class Game {
             else if (mode.equals(ARCADE) && getHunter().getFishesSize() <= 0)
                 gameContinue = false;
             else
-                incrementTurn();
+                incrementTurn(); //Increment turn if lose condition is not satisfied
         } while (gameContinue);
+        // If game mode is story mode, the hunters fish balance is within the target fish balance or exceeds the target fish balance then set the win condition to true
         if (mode.equals(STORY) && ((getHunter().getFishesSize() >= targetFishBal * 0.9 && getHunter().getFishesSize() <= targetFishBal * 1.1) || getHunter().getFishesSize() > targetFishBal)) {
             System.out.println(getMenu().getGameWinMenu());
             setWin(true);

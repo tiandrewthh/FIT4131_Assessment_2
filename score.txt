@@ -20,3 +20,5 @@ Mode: Arcade, Player name: bob, Days lasted: 2
 Mode: Arcade, Player name: bob, Days lasted: 1
 Mode: Arcade, Player name: bob, Days lasted: 5
 Mode: Arcade, Player name: 2122, Days lasted: 1
+Mode: Arcade, Player name: bob, Days lasted: 2
+Mode: Story, Player name: bob, Number of turns: 5, Target fish balance: 25, Final fish balance:  0, Outcome: Lose

@@ -35,7 +35,8 @@ public class FileIO {
     }
 
     /**
-     * @return
+     * Method to read the contents of a file and return the contents
+     * @return                  The contents of a file as a String
      */
     public String readFile() {
         String fileContents = "";
@@ -58,14 +59,16 @@ public class FileIO {
     }
 
     /**
-     * @param fileName
+     * Mutator method to set the name of a file
+     * @param fileName          The name of a file as a String
      */
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
     /**
-     * @param input
+     * Method to write content to a file
+     * @param input             The contents to write as a String
      */
     public void writeFile(String input) {
         try {
