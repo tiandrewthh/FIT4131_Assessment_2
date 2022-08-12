@@ -488,30 +488,30 @@ public class Game {
 
     /**
      * Mutator method to set the total amount of fishes owed by a player
-     * @param totalFishesOwed
+     * @param totalFishesOwed   The total fishes owed as an int
      */
     public void setTotalFishesOwed(int totalFishesOwed) {
         this.totalFishesOwed = totalFishesOwed;
     }
 
     /**
-     * Mutator method to set the
-     * @param turnLimit
+     * Mutator method to set the turn limit of a game
+     * @param turnLimit         The turn limit of a game
      */
     public void setTurnLimit(int turnLimit) {
         this.turnLimit = turnLimit;
     }
 
     /**
-     * Mutator method to set the
-     * @param win
+     * Mutator method to set the win condition
+     * @param win               The win condition as a boolean
      */
     public void setWin(boolean win) {
         isWin = win;
     }
 
     /**
-     *
+     * Method to start the game's arcade mode
      */
     public void startArcadeMode() {
         boolean gameContinue = getHunter().getFishesSize() > 0;
@@ -519,7 +519,7 @@ public class Game {
     }
 
     /**
-     *
+     * Method to start a game
      */
     public static void startGame() {
         Game newGame = new Game();
@@ -541,6 +541,9 @@ public class Game {
         newGame.writeFile(SCORE_TEXTFILE);
     }
 
+    /**
+     * Method to start the game's story mode
+     */
     public void startStoryMode() {
         int turnsLimit = 0;
         int targetFishBalance = 0;
@@ -567,6 +570,12 @@ public class Game {
         startTurn(getMode(), !gameContinue, getTargetFishBal());
     }
 
+    /**
+     * Method to start the sequence of a game's turn
+     * @param mode              The game's mode as a String
+     * @param gameContinue      The game's turn continue condition as a boolean
+     * @param targetFishBal     The target fish balance of the game as an int
+     */
     public void startTurn(String mode, boolean gameContinue, int targetFishBal) {
         System.out.println(getTurns());
         System.out.println(getTurnLimit());
@@ -609,6 +618,10 @@ public class Game {
             System.out.println(getMenu().getGameOverMenu());
     }
 
+    /**
+     * Method to write the results of a game's outcome to a file
+     * @param fileName          The file name as a String
+     */
     public void writeFile(String fileName) {
         FileIO fileIO = new FileIO(fileName);
         fileIO.writeFile(getGameResult());
