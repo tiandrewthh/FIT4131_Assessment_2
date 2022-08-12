@@ -1,3 +1,6 @@
 # FIT4131_Assessment_2
 To compile
-```javac *.java src/```
+```cd to src```
+```javac *.java```
+To run
+```java Game```
