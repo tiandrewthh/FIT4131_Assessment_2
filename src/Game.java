@@ -88,6 +88,7 @@ public class Game {
 
             Fish randomFish = new Fish();
             int caughtFish = genRandomFishNo(selectedWeapon.getMinFish(), selectedWeapon.getMaxFish());
+            // Check if weapon is strong or weak against fish
             if (selectedWeapon.getStrongAgainst().equals(randomFish.getType())) {
                 caughtFish *= 2;
                 System.out.printf(Menu.ANSI_GREEN + "DOUBLE FISH CAUGHT! %s is strong against %s\n" + Menu.ANSI_RESET, selectedWeapon.getName(), randomFish.getType());
@@ -96,13 +97,12 @@ public class Game {
                 caughtFish /= 2;
                 System.out.printf(Menu.ANSI_RED + "HALF FISH CAUGHT! %s is weak against %s\n" + Menu.ANSI_RESET, selectedWeapon.getName(), randomFish.getType());
             }
-
+            // Add caught fish to hunter
             System.out.printf("Hunter %s caught " + Menu.ANSI_GREEN + "+%d" + Menu.ANSI_RESET + " %s fishes with %s\n", getHunter().getName(), caughtFish, randomFish.getType(), selectedWeapon.getName());
-            for (int i = 0; i < caughtFish; i++)
-                getHunter().addFish(new Fish(randomFish.getType()));
+            getHunter().addFishes(caughtFish);
 
             huntTurns--;
-
+            // Prompt hunter option to continue hunter if there are still hunting turns left
             if (huntTurns > 0) {
                 boolean isValid = false;
                 while (!isValid) {
