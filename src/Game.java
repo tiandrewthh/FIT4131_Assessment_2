@@ -52,7 +52,10 @@ public class Game {
             while (!isValid) {
                 try {
                     int loanAmount = input.acceptIntegerInput("Please choose a loan amount between 30 and 100");
-                    if (loanAmount >= 30 && loanAmount <= 100) {
+                    if ((loanAmount + getHunter().getTotalLoans()) > 100) {
+                        System.out.println(Menu.ANSI_RED + "Cannot exceed accumulated loan amount of 100" + Menu.ANSI_RESET);
+                    }
+                    else if (loanAmount >= 30 && loanAmount <= 100) {
                         System.out.printf("Borrowed" + Menu.ANSI_GREEN + " +%d " + Menu.ANSI_RESET + "fishes at 50 percent interest\n", loanAmount);
                         getHunter().addSpecificLoan(loanAmount, 1.5, 3);
                         getHunter().addFishes(loanAmount);
