@@ -368,13 +368,7 @@ public class Game {
         return isWin;
     }
 
-    /**
-     * Method to begin the program
-     * @param args              An array of Strings representing command line arguments
-     */
-    public static void main(String[] args) {
-        startGame();
-    }
+
 
     /**
      * Method to read a file to a weapon object

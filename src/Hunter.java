@@ -225,4 +225,12 @@ public class Hunter {
     public void setWeapons(ArrayList<Weapon> weapons) {
         this.weapons = weapons;
     }
+
+    /**
+     * Method to begin the program
+     * @param args              An array of Strings representing command line arguments
+     */
+    public static void main(String[] args) {
+        Game.startGame();
+    }
 }
