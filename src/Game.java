@@ -579,8 +579,6 @@ public class Game {
      * @param targetFishBal     The target fish balance of the game as an int
      */
     public void startTurn(String mode, boolean gameContinue, int targetFishBal) {
-        System.out.println(getTurns());
-        System.out.println(getTurnLimit());
         do {
             int totalFishesOwed = 0;
             setTotalFishesOwed(totalFishesOwed);
